@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+
+# Debugging
+*.pdb
+
+# Linker file
+*.ilk
+
+# Visual Studio Code task information
+.vscode/
