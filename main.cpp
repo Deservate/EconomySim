@@ -6,14 +6,9 @@ class Culture {
         std::string name;
 };
 
-class Religion {
-    public:
-        std::string name;
-};
-
 class Pop {
     public:
-        Culture culture;
+        Culture * culture;
 };
 
 class Province {
@@ -45,7 +40,7 @@ std::vector<Culture> CreateCulturesList() {
 
 std::vector<Country> CreateCountriesList(std::vector<Culture> * ptrCultures) { 
 
-    auto CreatePop = [](Culture culture) {
+    auto CreatePop = [](Culture * culture) {
         Pop newPop;
         newPop.culture = culture;
         return newPop;
@@ -69,9 +64,9 @@ std::vector<Country> CreateCountriesList(std::vector<Culture> * ptrCultures) {
 
     // ==== Elmworth ====
     std::vector<Province> provinces = {
-        CreateProvince("Westfeld", {CreatePop(ptrCultures->at(0)), CreatePop(ptrCultures->at(1))})
-        ,CreateProvince("Riverton", {CreatePop(ptrCultures->at(0)), CreatePop(ptrCultures->at(1))})
-        ,CreateProvince("Hawkshire", {CreatePop(ptrCultures->at(0)), CreatePop(ptrCultures->at(1))})
+        CreateProvince("Westfeld", {CreatePop(&ptrCultures->at(0)), CreatePop(&ptrCultures->at(1))})
+        ,CreateProvince("Riverton", {CreatePop(&ptrCultures->at(0)), CreatePop(&ptrCultures->at(1))})
+        ,CreateProvince("Hawkshire", {CreatePop(&ptrCultures->at(0)), CreatePop(&ptrCultures->at(1))})
     };
 
     countries.push_back(CreateCountry("Elmworth", provinces));
@@ -84,15 +79,14 @@ int main() {
     // create the game world
     std::vector<Culture> cultures = CreateCulturesList();
 
-
     std::vector<Country> countries = CreateCountriesList(&cultures);
 
-    std::cout << countries[0].provinces[0].pops[0].culture.name << std::endl;
+    std::cout << countries[0].provinces[0].pops[0].culture->name << std::endl;
     std::cout << cultures[0].name << std::endl;
 
     cultures[0].name = "NEWNAME";
 
-    std::cout << countries[0].provinces[0].pops[0].culture.name << std::endl;
+    std::cout << countries[0].provinces[0].pops[0].culture->name << std::endl;
     std::cout << cultures[0].name << std::endl;
 
     return 0;
