@@ -9,6 +9,8 @@ class Culture {
 class Pop {
     public:
         Culture * culture;
+        std::vector<int> menPerAge;
+        std::vector<int> womanPerAge;
 };
 
 class Province {
@@ -40,9 +42,11 @@ std::vector<Culture> CreateCulturesList() {
 
 std::vector<Country> CreateCountriesList(std::vector<Culture> * ptrCultures) { 
 
-    auto CreatePop = [](Culture * culture) {
+    auto CreatePop = [](Culture * culture, std::vector<int> menPerAge, std::vector<int> womenPerAge) {
         Pop newPop;
         newPop.culture = culture;
+        newPop.menPerAge = menPerAge;
+        newPop.womanPerAge = womenPerAge;
         return newPop;
     };
 
@@ -63,10 +67,10 @@ std::vector<Country> CreateCountriesList(std::vector<Culture> * ptrCultures) {
     std::vector<Country> countries;
 
     // ==== Elmworth ====
+    std::vector<int> popVec(100, 1e4);
     std::vector<Province> provinces = {
-        CreateProvince("Westfeld", {CreatePop(&ptrCultures->at(0)), CreatePop(&ptrCultures->at(1))})
-        ,CreateProvince("Riverton", {CreatePop(&ptrCultures->at(0)), CreatePop(&ptrCultures->at(1))})
-        ,CreateProvince("Hawkshire", {CreatePop(&ptrCultures->at(0)), CreatePop(&ptrCultures->at(1))})
+        CreateProvince("Westfeld", {CreatePop(&ptrCultures->at(0), popVec, popVec), CreatePop(&ptrCultures->at(1), popVec, popVec)})
+        ,CreateProvince("Riverton", {CreatePop(&ptrCultures->at(0), popVec, popVec), CreatePop(&ptrCultures->at(1), popVec, popVec)})
     };
 
     countries.push_back(CreateCountry("Elmworth", provinces));
@@ -74,20 +78,20 @@ std::vector<Country> CreateCountriesList(std::vector<Culture> * ptrCultures) {
     return countries;
 }
 
+void DrawInterface(std::string bodyText){
+    
+    std::cout << std::string(80,'-') << std::endl;
+    std::cout << bodyText << std::endl;
+    std::cout << std::string(80,'-') << std::endl;
+}
+
 int main() {
     
     // create the game world
     std::vector<Culture> cultures = CreateCulturesList();
-
     std::vector<Country> countries = CreateCountriesList(&cultures);
 
-    std::cout << countries[0].provinces[0].pops[0].culture->name << std::endl;
-    std::cout << cultures[0].name << std::endl;
-
-    cultures[0].name = "NEWNAME";
-
-    std::cout << countries[0].provinces[0].pops[0].culture->name << std::endl;
-    std::cout << cultures[0].name << std::endl;
+    DrawInterface("This is the body text of the scene");
 
     return 0;
 }
